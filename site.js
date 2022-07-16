@@ -18,7 +18,7 @@ button.addEventListener('click', function(){
     var encrypted = cryptico.encrypt(themessage, theirpublickey, RSAKeys)
     sendMessage([encrypted.cipher])
     //NOTE: This method doesn't guarantee they decrypted the message. The best method is to let them send you signed confirmation
-    document.getElementById("messages").innerHTML += "<br><br>You: " + msg + "<br>(seen by " + peerInfo + " peers) <br>" + "Time: " + timestamp
+    document.getElementById("messages").innerHTML = "You: " + msg + "<br>(seen by " + peerInfo + " peers) <br>" + "Time: " + timestamp + "<br><br>" + document.getElementById("messages").innerHTML
     document.getElementById("mymessage").value = ""
   }
 })
@@ -36,11 +36,10 @@ function joinThis(config, rm) {
 }
 
 function notify(mystring) {
-    document.getElementById("messages").innerHTML += "<br><br>" + mystring
+    document.getElementById("messages").innerHTML = mystring + "<br><br>" + document.getElementById("messages").innerHTML
 }
 
 function showMessage(message) {
-    console.log(message)
     if(Crypto.SHA256(message[0]) in hashes) {
         return
     }
@@ -50,7 +49,7 @@ function showMessage(message) {
     if(newmessage.signature == "verified" && newmessage.publicKeyString == theirpublickey) {
         var msg = newmessage.plaintext.split("#!#!#!#")[0]
         var timestamp = newmessage.plaintext.split("#!#!#!#")[1]
-        document.getElementById("messages").innerHTML += "<br><br>Them: " + msg + "<br>Time: " + timestamp
+        document.getElementById("messages").innerHTML = "Them: " + msg + "<br>Time: " + timestamp + "<br><br>" + document.getElementById("messages").innerHTML
     }
 }
 
