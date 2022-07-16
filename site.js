@@ -12,7 +12,7 @@ var hashes = {} //So that other nodes don't try to spam a message by replaying i
 button.addEventListener('click', function(){
   if (room) {
     updatePeerInfo()
-    var msg = document.getElementById("mymessage").value
+    var msg = DOMPurify.sanitize(document.getElementById("mymessage").value)
     var timestamp = Math.floor(Date.now() / 1000)
     var themessage = msg + "#!#!#!#" + timestamp
     var encrypted = cryptico.encrypt(themessage, theirpublickey, RSAKeys)
@@ -36,7 +36,7 @@ function joinThis(config, rm) {
 }
 
 function notify(mystring) {
-    document.getElementById("messages").innerHTML = mystring + "<br><br>" + document.getElementById("messages").innerHTML
+    document.getElementById("messages").innerHTML = DOMPurify.sanitize(mystring) + "<br><br>" + document.getElementById("messages").innerHTML
 }
 
 function showMessage(message) {
@@ -49,7 +49,7 @@ function showMessage(message) {
     if(newmessage.signature == "verified" && newmessage.publicKeyString == theirpublickey) {
         var msg = newmessage.plaintext.split("#!#!#!#")[0]
         var timestamp = newmessage.plaintext.split("#!#!#!#")[1]
-        document.getElementById("messages").innerHTML = "Them: " + msg + "<br>Time: " + timestamp + "<br><br>" + document.getElementById("messages").innerHTML
+        document.getElementById("messages").innerHTML = "Them: " + DOMPurify.sanitize(msg) + "<br>Time: " + DOMPurify.sanitize(timestamp) + "<br><br>" + document.getElementById("messages").innerHTML
     }
 }
 
