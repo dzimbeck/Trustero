@@ -34,3 +34,10 @@ How it works:
 RSA public key cryptography is used for signing and verifying messages. This is extremely useful in serverless
 architecture. This is done thanks to the Criptico library which is being used purely on the front end. The
 users private keys are basically going to be as strong as whatever username and password they decide to use.
+
+With that said, the Cryptico library is older and is probabily in need of a full audit. JavaScript crypto
+has some issues with side channels and randoms although solutions exist to improve that. So in the meantime
+it's also a good idea to encrypt the messages with AES with an additional password that protects the room.
+One way to generate a good random is to ask the user to make many mouse movements and so forth.
+Some comments... probably need to made the public exponent 65537 or larger instead of 3. (small exponent attacks)
+Should verify the padding as well. Also should analyse and possibly improve random number generation.
