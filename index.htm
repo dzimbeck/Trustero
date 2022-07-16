@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="web3.min.js"></script>
+<script type="text/javascript" src="./coin.js"></script>
+<script type="text/javascript" src="./ellipticcurve.js"></script>
+<script type="text/javascript" src="./crypto-sha256.js"></script>
+<script type="text/javascript" src="./jsbn.js"></script>
+<script type="text/javascript" src="./nacl.min.js"></script>
+<script type="text/javascript" src="./aes.js"></script>
+<script type="text/javascript" src="./crypto-js.js"></script>
+<script type="text/javascript" src="./cryptico.min.js"></script>
+<head>
+<meta charset="utf-8" />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, user-scalable=no"
+/>
+<meta
+name="description"
+content="Serverless, decentralized and encrypted P2P chat based on Trystero"
+/>
+<link href="favicon.png" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+<title>Trustero chat</title>
+<img src="./pidgeon.png" style="height: 75px; width: 75px;"/>
+</head>
+<body>
+<div id="canvas"></div>
+<header>
+</header>
+
+<p id="Intro">
+Trustero P2P Chat: Serverless, decentralized, encrypted
+</p>
+<script type="text/javascript">
+    //Some extra and useful crypto libraries were loaded, however only some of them are used.
+    //web3 = new Web3("");
+    privatekey = ''
+    publickey = ''
+    theirpublickey = ''
+    RSAKeys = ''
+    function login() {        
+        user = document.getElementById("username").value
+        password = document.getElementById("password").value
+        //privatekey = Crypto.SHA256(user + password)
+        //publickey = coinjs.newPubkey(privatekey)
+        //Symmetric
+        //encrypt = CryptoJS.AES.encrypt(hashthis, publickey).toString();
+        //decrypted = CryptoJS.AES.decrypt(encrypt, publickey).toString(CryptoJS.enc.Utf8);
+        RSAKeys = cryptico.generateRSAKey(Crypto.SHA256(user + password), 512)
+        publickey = cryptico.publicKeyString(RSAKeys)
+        document.getElementById("Info").innerHTML = "Your public key(share this to anyone who you wish to chat with): <br>" + publickey
+    }
+</script>
+
+Username:  <input class="textBox" id="username" type="text" width="70" required/>&nbsp&nbsp
+Password:  <input class="textBox" type="password" id="password" type="text" width="70" required/>&nbsp&nbsp
+<input type="button" id="login" value="Login" onclick=login()><br><br>
+Counter-party public key:  <input class="textBox" id="theirpub" type="text" width="70" required/>&nbsp&nbsp<input type="button" id="enterchat" value="Enter chat"><br>
+<p id="Info">
+</p>
+<br>
+<input class="textBox" id="mymessage" type="text" width="70"    required/>
+<input type="button" id="sendbutton" value="Send message" onclick="">
+<style>
+div.scroll {
+    background-color: #090909;
+    color: #E4E9F0;
+    width: 500px;
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: center;
+    padding: 20px;
+    }
+</style>
+<p></p>
+<p></p>
+<div class="scroll" id="messages"  width="500" height="400">
+</div>
+<script src="site.js" type="module">
+</script>
+<br><br>
+<p id="Outro">
+About the project:<br><br>
+"Trust"ero uses the protocol of Trystero which is a purely JavaScript webRTC matchmaking system. This allows<br>
+trustless peer to peer services. There is no external dependencies and no servers. The advantages are that you<br>
+can audit and trust the code and fully eliminate the need for central servers making this a true decentralized chat.<br>
+The chat rooms are completely private and password protected. They are generated based on the users public keys.<br>
+
+Want to test this for fun? Try opening up a second tab and joining a chat with yourself. You can also run this<br>
+website on your local machine and verify the security of all the code involved. All chats are encrypted using<br>
+RSA public key cryptography. Therefore, the sender signs and encrypts the message. This allows the receiver to<br>
+verify that the sender is who he says he is and not someone pretending to be him. Also because it's encrypted<br>
+only the receiver of a message is able to read it. This project is shown only as a demo. However it's easy to<br>
+turn this into a fully fledged chat program for both Android and web. RSA public key cryptography is very rare<br>
+among purely front end JavaScript projects. Also serverless architecture is usually complicated. However, this<br>
+code shows how simple it can be thanks to Trystero and cryptico libraries. Hopefully more projects will use<br>
+this strategy to make safe and serverless web pages, games, and decentralized applications.<br><br>
+<a href="https://github.com/dzimbeck/trustero">https://github.com/dzimbeck/trustero</a>
+<br><br>
+</p>
+</body>
+</html>
