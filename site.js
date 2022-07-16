@@ -62,8 +62,11 @@ function updatePeerInfo() {
 async function chatmain() {
     console.log("Welcome to P2P chat")
     theirpublickey = document.getElementById("theirpub").value
-    var keys = [publickey, theirpublickey].sort()
-    var sharedKeys = Crypto.SHA256(keys)
+    var mykeys = []
+    mykeys.push(publickey)
+    mykeys.push(theirpublickey)
+    mykeys.sort()
+    var sharedKeys = Crypto.SHA256(mykeys[0]+mykeys[1])
     joinThis({appId: 'Trustero', password: 'optional'}, sharedKeys)
     notify("Joined Room - " + sharedKeys)
 }
