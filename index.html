@@ -22,7 +22,7 @@ content="Serverless, decentralized and encrypted P2P chat based on Trystero"
 <link rel="stylesheet" style="background-color: #090909;"/>
 <title>Trustero chat</title>
 </head>
-<body onClick='rng_seed_time();' onKeyPress='rng_seed_time();' style="background-color: #111017; color: #E4E9F0;">
+<body onClick='{rng_seed_time();}' style="background-color: #111017; color: #E4E9F0;">
 <header>
 </header>
 <div id="main-div" style="height: 1500px; width: 550px; margin: auto;">
@@ -31,12 +31,23 @@ content="Serverless, decentralized and encrypted P2P chat based on Trystero"
 Trustero P2P Chat: Serverless, decentralized, encrypted
 </p>
 <script type="text/javascript">
+    document.onkeydown = function (e) {
+        rng_seed_time();
+        rand=Crypto.SHA256(rand + Math.floor(Date.now()) + event.clientX + event.clientX + Math.random() + e)
+    }
+    async function checkImage(url){
+         const res = await fetch(url);
+         const buff = await res.blob();
+         return {'blob':res.blob, 'result':buff.type.startsWith('image/')}
+    }
     //Some extra and useful crypto libraries were loaded, however only some of them are used.
     privatekey = ''
     publickey = ''
     theirpublickey = ''
     RSAKeys = ''
     AESkey = 'optional'
+    loadimages = true
+    rand = Crypto.SHA256(Math.random())
     function login() {        
         user = document.getElementById("username").value
         password = document.getElementById("password").value
@@ -124,6 +135,14 @@ it here before ending a room. This feature is optional for added security.
 <br>
 <input class="textBox" id="AESPW" type="password" width="150" required/>
 <br><br>
+<lable>Display image links</lable>
+<input id="checkedValue" type="checkbox" value=true onclick=changeval(this)>
+<script type="text/javascript">
+document.getElementById("checkedValue").checked = true;
+function changeval(myval) {
+    loadimages = myval.checked
+}
+</script>
 </div>
 </body>
 </html>

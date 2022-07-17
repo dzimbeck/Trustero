@@ -14,7 +14,7 @@ button.addEventListener('click', function(){
     updatePeerInfo()
     var msg = DOMPurify.sanitize(document.getElementById("mymessage").value)
     var timestamp = Math.floor(Date.now() / 1000)
-    var themessage = msg + "#!#!#!#" + timestamp
+    var themessage = msg + "#!#!#!#" + timestamp + "#!#!#!#" + rand + Crypto.SHA256(rand)//Add some junk data to avoid cryptoanalysis
     var encrypted = cryptico.encrypt(themessage, theirpublickey, RSAKeys)
     if(AESkey == 'optional') {
         sendMessage([encrypted.cipher])
@@ -43,7 +43,7 @@ function notify(mystring) {
     document.getElementById("messages").innerHTML = DOMPurify.sanitize(mystring) + "<br><br>" + document.getElementById("messages").innerHTML
 }
 
-function showMessage(message) {
+async function showMessage(message) {
     if(Crypto.SHA256(message[0]) in hashes) {
         return
     }
@@ -55,12 +55,23 @@ function showMessage(message) {
     else {
         var newmessage = cryptico.decrypt(message[0], RSAKeys)
     }
-    
+    if(newmessage.plaintext.length < 85) {        
+        return //Message seems a bit small lets just not let counter-party know if we can decrypt it avoid any cryptoanalysis
+    }
     //This both decrypts and verifies they signed the message
     if(newmessage.signature == "verified" && newmessage.publicKeyString == theirpublickey) {
         var msg = newmessage.plaintext.split("#!#!#!#")[0]
+        msg = DOMPurify.sanitize(msg)
+        if(msg.toLowerCase().indexOf(".jpg") >= 0 || msg.toLowerCase().indexOf(".png") >= 0 || msg.toLowerCase().indexOf(".bmp") >= 0) {
+            if(loadimages == true) {
+                var res = await checkImage(msg.replace(/[^a-z0-9./:]/gi,''))
+                if(res.result == true) {                
+                    msg = '<img src="' + msg.replace(/[^a-z0-9./:]/gi,'') + '">'
+                }
+            }
+        }        
         var timestamp = newmessage.plaintext.split("#!#!#!#")[1]
-        document.getElementById("messages").innerHTML = "Them: " + DOMPurify.sanitize(msg) + "<br>Time: " + DOMPurify.sanitize(timestamp) + "<br><br>" + document.getElementById("messages").innerHTML
+        document.getElementById("messages").innerHTML = "Them: " + msg + "<br>Time: " + DOMPurify.sanitize(timestamp) + "<br><br>" + document.getElementById("messages").innerHTML
     }
 }
 
