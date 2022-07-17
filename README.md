@@ -31,13 +31,16 @@ How it works:
    not actively chatting with, they can cycle through their rooms in batches of 50-100 at a time. Then every few
    minutes they leave and join another batch. They can prioritize the users they more commonly chat with.
 
-RSA public key cryptography is used for signing and verifying messages. This is extremely useful in serverless
-architecture. This is done thanks to the Criptico library which is being used purely on the front end. The
-users private keys are basically going to be as strong as whatever username and password they decide to use.
+RSA public key cryptography is used for asymmetric encryption with signing and verifying messages. This is 
+extremely useful in serverless architecture. This is done thanks to the Criptico library which is being used 
+purely on the front end. The users private keys are basically going to be as strong as whatever username and
+password they decide to use.
 
 With that said, the Cryptico library is older and is probabily in need of a full audit. JavaScript crypto
-has some issues with side channels and randoms although solutions exist to improve that. So in the meantime
-it's also a good idea to encrypt the messages with AES with an additional password that protects the room.
-One way to generate a good random is to ask the user to make many mouse movements and so forth.
-Some comments... probably need to made the public exponent 65537 or larger instead of 3. (small exponent attacks)
-Should verify the padding as well. Also should analyse and possibly improve random number generation.
+may have some issues with side channels(although I can't think of any attack that would apply here) and randoms
+although solutions exist to improve that. Still in the meantime it's also a good idea to encrypt the messages with
+AES with an additional password that protects the room. One way to generate a good random is to ask the user to 
+make many mouse movements and so forth. Some comments... probably need to check if the public exponents are 65537 
+or larger instead of something like 3(small exponent attacks). Also one should verify the padding as well.
+Also one could analyse and possibly improve random number generation. Lastly some useful libraries are included
+but not used such as NACL. That may be a secure addition and it has been audited as well.

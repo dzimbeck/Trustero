@@ -19,13 +19,14 @@ name="description"
 content="Serverless, decentralized and encrypted P2P chat based on Trystero"
 />
 <link href="favicon.png" rel="icon" type="image/png" />
+<link rel="stylesheet" style="background-color: #090909;"/>
 <title>Trustero chat</title>
-<img src="./Pidgeon.png" style="height: 75px; width: 75px;"/>
 </head>
-<body onClick='rng_seed_time();' onKeyPress='rng_seed_time();'>
+<body onClick='rng_seed_time();' onKeyPress='rng_seed_time();' style="background-color: #111017; color: #E4E9F0;">
 <header>
 </header>
-
+<div id="main-div" style="height: 1500px; width: 550px; margin: auto;">
+<img src="./Pidgeon.png" style="height: 75px; width: 75px;"/>
 <p id="Intro">
 Trustero P2P Chat: Serverless, decentralized, encrypted
 </p>
@@ -35,6 +36,7 @@ Trustero P2P Chat: Serverless, decentralized, encrypted
     publickey = ''
     theirpublickey = ''
     RSAKeys = ''
+    AESkey = 'optional'
     function login() {        
         user = document.getElementById("username").value
         password = document.getElementById("password").value
@@ -43,21 +45,33 @@ Trustero P2P Chat: Serverless, decentralized, encrypted
         //Symmetric
         //encrypt = CryptoJS.AES.encrypt(hashthis, publickey).toString();
         //decrypted = CryptoJS.AES.decrypt(encrypt, publickey).toString(CryptoJS.enc.Utf8);
-        RSAKeys = cryptico.generateRSAKey(Crypto.SHA256(user + password), 512)
+        mybits = parseInt(document.getElementById("bits").value);
+        RSAKeys = cryptico.generateRSAKey(Crypto.SHA256(Crypto.SHA256(user + password)), mybits)
         publickey = cryptico.publicKeyString(RSAKeys)
         document.getElementById("Info").innerHTML = "Your public key(share this to anyone who you wish to chat with): <br>" + publickey
     }
 </script>
 
-Username:  <input class="textBox" id="username" type="text" width="70" required/>&nbsp&nbsp
-Password:  <input class="textBox" type="password" id="password" type="text" width="70" required/>&nbsp&nbsp
+Username:  <input class="textBox" id="username" type="text" width="75" required/>&nbsp&nbsp
+Password:  <input class="textBox" type="password" id="password" type="text" width="75" required/>&nbsp&nbsp
 <input type="button" id="login" value="Login" onclick=login()><br><br>
-Counter-party public key:  <input class="textBox" id="theirpub" type="text" width="70" required/>&nbsp&nbsp<input type="button" id="enterchat" value="Enter chat"><br>
-<p id="Info">
-</p>
+Counter-party public key:  <input class="textBox" id="theirpub" type="text" width="75" required/>&nbsp&nbsp<input type="button" id="enterchat" value="Enter chat"/><br>
+<style>
+div.myinfo {
+    width: 500px;
+    height: 55px;
+    word-wrap: break-word;
+    overflow-y: auto;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid black;
+    }
+</style>
+<div id="Info" class="myinfo">
+</div>
 <br>
-<input class="textBox" id="mymessage" type="text" width="70"    required/>
-<input type="button" id="sendbutton" value="Send message" onclick="">
+<input class="textBox" id="mymessage" type="text" width="75" required/>
+<input type="button" id="sendbutton" value="Send message" onclick=""/>
 <style>
 div.scroll {
     background-color: #090909;
@@ -68,6 +82,7 @@ div.scroll {
     overflow-y: auto;
     text-align: center;
     padding: 20px;
+    border: 2px;
     }
 </style>
 <p></p>
@@ -77,24 +92,38 @@ div.scroll {
 <script src="site.js" type="module">
 </script>
 <br><br>
-<p id="Outro">
+<div id="Outro" class="myinfo">
 About the project:<br><br>
-"Trust"ero uses the protocol of Trystero which is a purely JavaScript webRTC matchmaking system. This allows<br>
-trustless peer to peer services. There is no external dependencies and no servers. The advantages are that you<br>
-can audit and trust the code and fully eliminate the need for central servers making this a true decentralized chat.<br>
+"Trust"ero uses the protocol of Trystero which is a purely JavaScript webRTC matchmaking system. This allows
+trustless peer to peer services. There is no external dependencies and no servers. The advantages are that you
+can audit and trust the code and fully eliminate the need for central servers making this a true decentralized chat.
 The chat rooms are completely private and password protected. They are generated based on the users public keys.<br>
 
-Want to test this for fun? Try opening up a second tab and joining a chat with yourself. You can also run this<br>
-website on your local machine and verify the security of all the code involved. All chats are encrypted using<br>
-RSA public key cryptography. Therefore, the sender signs and encrypts the message. This allows the receiver to<br>
-verify that the sender is who he says he is and not someone pretending to be him. Also because it's encrypted<br>
-only the receiver of a message is able to read it. This project is shown only as a demo. However it's easy to<br>
-turn this into a fully fledged chat program for both Android and web. RSA public key cryptography is very rare<br>
-among purely front end JavaScript projects. Also serverless architecture is usually complicated. However, this<br>
-code shows how simple it can be thanks to Trystero and cryptico libraries. Hopefully more projects will use<br>
+Want to test this for fun? Try opening up a second tab and joining a chat with yourself. You can also run this
+website on your local machine and verify the security of all the code involved. All chats are encrypted using
+RSA public key cryptography. Therefore, the sender signs and encrypts the message. This allows the receiver to
+verify that the sender is who he says he is and not someone pretending to be him. Also because it's encrypted
+only the receiver of a message is able to read it. This project is shown only as a demo. However it's easy to
+turn this into a fully fledged chat program for both Android and web. RSA public key cryptography is very rare
+among purely front end JavaScript projects. Also serverless architecture is usually complicated. However, this
+code shows how simple it can be thanks to Trystero and cryptico libraries. Hopefully more projects will use
 this strategy to make safe and serverless web pages, games, and decentralized applications.<br><br>
-<a href="https://github.com/dzimbeck/trustero">https://github.com/dzimbeck/trustero</a>
+</div><br>
+<a href="https://github.com/dzimbeck/trustero" style="color: #998BCB">https://github.com/dzimbeck/trustero</a>
 <br><br>
-</p>
+Advanced options:<br><br>
+Login private key complexity(higher is more secure, lower is faster)
+<select id="bits">
+<option>512</option>
+<option>1024</option>
+<option>2048</option>
+</select>
+<br><br>
+AES Password for your private room. Share this with your counter-party and enter<br>
+it here before ending a room. This feature is optional for added security.
+<br>
+<input class="textBox" id="AESPW" type="password" width="150" required/>
+<br><br>
+</div>
 </body>
 </html>

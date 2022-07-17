@@ -16,7 +16,11 @@ button.addEventListener('click', function(){
     var timestamp = Math.floor(Date.now() / 1000)
     var themessage = msg + "#!#!#!#" + timestamp
     var encrypted = cryptico.encrypt(themessage, theirpublickey, RSAKeys)
-    sendMessage([encrypted.cipher])
+    if(AESkey == 'optional') {
+        sendMessage([encrypted.cipher])
+    } else {
+        sendMessage([CryptoJS.AES.encrypt(encrypted.cipher, AESkey).toString()])
+    }
     //NOTE: This method doesn't guarantee they decrypted the message. The best method is to let them send you signed confirmation
     document.getElementById("messages").innerHTML = "You: " + msg + "<br>(seen by " + peerInfo + " peers) <br>" + "Time: " + timestamp + "<br><br>" + document.getElementById("messages").innerHTML
     document.getElementById("mymessage").value = ""
@@ -44,7 +48,14 @@ function showMessage(message) {
         return
     }
     hashes[Crypto.SHA256(message[0])] = 1;
-    var newmessage = cryptico.decrypt(message[0], RSAKeys)
+    if(AESkey != "optional") {
+        var decrypted = CryptoJS.AES.decrypt(message[0], AESkey).toString(CryptoJS.enc.Utf8);
+        var newmessage = cryptico.decrypt(decrypted, RSAKeys)
+    }
+    else {
+        var newmessage = cryptico.decrypt(message[0], RSAKeys)
+    }
+    
     //This both decrypts and verifies they signed the message
     if(newmessage.signature == "verified" && newmessage.publicKeyString == theirpublickey) {
         var msg = newmessage.plaintext.split("#!#!#!#")[0]
@@ -59,13 +70,23 @@ function updatePeerInfo() {
 }
 
 async function chatmain() {
+    theirpublickey = document.getElementById("theirpub").value    
+    if(publickey == '' || theirpublickey == '') {
+        console.log("Please log in and supply the counter-party public key before entering a chat.")
+        return
+    }
+    AESkey = document.getElementById("AESPW").value
+    if(AESkey != '') {
+        AESkey = Crypto.SHA256(AESkey)
+    } else {
+        AESkey = 'optional'
+    }
     console.log("Welcome to P2P chat")
-    theirpublickey = document.getElementById("theirpub").value
     var mykeys = []
     mykeys.push(publickey)
     mykeys.push(theirpublickey)
     mykeys.sort()
     var sharedKeys = Crypto.SHA256(mykeys[0]+mykeys[1])
-    joinThis({appId: 'Trustero', password: 'optional'}, sharedKeys)
+    joinThis({appId: 'Trustero', password: AESkey}, sharedKeys)
     notify("Joined Room - " + sharedKeys)
 }
