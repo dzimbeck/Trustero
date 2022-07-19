@@ -22,7 +22,7 @@ button.addEventListener('click', function(){
         sendMessage([CryptoJS.AES.encrypt(encrypted.cipher, AESkey).toString()])
     }
     //NOTE: This method doesn't guarantee they decrypted the message. The best method is to let them send you signed confirmation
-    document.getElementById("messages").innerHTML = "You: " + msg + "<br>(seen by " + peerInfo + " peers) <br>" + "Time: " + timestamp + "<br><br>" + document.getElementById("messages").innerHTML
+    document.getElementById("messages").innerHTML = "<div style='color:#998BCB '>You: " + msg + "<br>(seen by " + peerInfo + " peers) <br>" + "Time: " + timestamp + "<br><br></div>" + document.getElementById("messages").innerHTML
     document.getElementById("mymessage").value = ""
   }
 })

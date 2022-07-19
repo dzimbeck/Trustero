@@ -25,7 +25,7 @@ content="Serverless, decentralized and encrypted P2P chat based on Trystero"
 <body onClick='{rng_seed_time();}' style="background-color: #111017; color: #E4E9F0;">
 <header>
 </header>
-<div id="main-div" style="height: 1500px; width: 550px; margin: auto;">
+<div id="main-div" style="height: 1500px; width: 80%; margin: auto;">
 <img src="./Pidgeon.png" style="height: 75px; width: 75px;"/>
 <p id="Intro">
 Trustero P2P Chat: Serverless, decentralized, encrypted
@@ -63,13 +63,13 @@ Trustero P2P Chat: Serverless, decentralized, encrypted
     }
 </script>
 
-Username:  <input class="textBox" id="username" type="text" width="75" required/>&nbsp&nbsp
-Password:  <input class="textBox" type="password" id="password" type="text" width="75" required/>&nbsp&nbsp
+Username:  <input class="textBox" id="username" type="text" width="75" required/><br><br>
+Password:  &nbsp<input class="textBox" type="password" id="password" type="text" width="75" required/>&nbsp&nbsp
 <input type="button" id="login" value="Login" onclick=login()><br><br>
 Counter-party public key:  <input class="textBox" id="theirpub" type="text" width="75" required/>&nbsp&nbsp<input type="button" id="enterchat" value="Enter chat"/><br>
 <style>
 div.myinfo {
-    width: 500px;
+    width: 100%;
     height: 55px;
     word-wrap: break-word;
     overflow-y: auto;
@@ -81,13 +81,13 @@ div.myinfo {
 <div id="Info" class="myinfo">
 </div>
 <br>
-<input class="textBox" id="mymessage" type="text" width="75" required/>
+<input class="textBox" id="mymessage" type="text" style="min-width: 210px; width: 23%" required/>&nbsp&nbsp
 <input type="button" id="sendbutton" value="Send message" onclick=""/>
 <style>
 div.scroll {
     background-color: #090909;
     color: #E4E9F0;
-    width: 500px;
+    width: 100%;
     height: 400px;
     overflow-x: hidden;
     overflow-y: auto;
